@@ -22,11 +22,11 @@ def main():
     val_data_path = "./data/claims_dev.jsonl"
     model_name = "roberta-large"
 
-    abstract_model = AbstractRetrievalModel(
-        corpus_path=corpus, dataset_path=train_data_path, top_n=4
-    )
-    abstract_model.fit()
-    abstract_model.evaluate()
+    # abstract_model = AbstractRetrievalModel(
+    #     corpus_path=corpus, dataset_path=train_data_path, top_n=4
+    # )
+    # abstract_model.fit()
+    # abstract_model.evaluate()
     
     # dataloader = ComythLabelDataloader(
     #     model_name=model_name,
@@ -54,8 +54,8 @@ def main():
     # )
     model = ComythRationaleModel(
         model_name=model_name,
-        lr_base=CONFIG["LABEL_PRED"]["LR_BASE"],
-        lr_linear=CONFIG["LABEL_PRED"]["LR_LINEAR"],
+        lr_base=CONFIG["RATIONALE_PRED"]["LR_BASE"],
+        lr_linear=CONFIG["RATIONALE_PRED"]["LR_LINEAR"],
     )
 
     trainer = model_trainer(

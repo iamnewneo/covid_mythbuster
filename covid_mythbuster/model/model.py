@@ -52,13 +52,19 @@ class ComythRationaleModel(pl.LightningModule):
 
     def validation_epoch_end(self, val_step_outputs):
         if not self.trainer.running_sanity_check:
-            avg_val_loss = torch.tensor([x["loss"].mean() for x in val_step_outputs]).mean()
+            avg_val_loss = torch.tensor(
+                [x["loss"].mean() for x in val_step_outputs]
+            ).mean()
             preds = torch.cat([x["y_pred"] for x in val_step_outputs], axis=0)
             targets = torch.cat([x["y_true"] for x in val_step_outputs], axis=0)
             self.log("val_loss", avg_val_loss, prog_bar=True)
+            targets_cpu = targets.cpu()
+            preds_cpu = preds.cpu()
             result = {
-                "macro_f1": f1_score(targets, preds, zero_division=0, average="macro"),
-                "accuracy": accuracy_score(targets, preds),
+                "macro_f1": f1_score(
+                    targets_cpu, preds_cpu, zero_division=0, average="macro"
+                ),
+                "accuracy": accuracy_score(targets_cpu, preds_cpu),
             }
             text = (
                 f"Epoch: {self.current_epoch} Train Loss: {self.temp_train_loss:.2f}"
@@ -117,14 +123,18 @@ class ComythLabelModel(pl.LightningModule):
             preds = torch.cat([x["y_pred"] for x in val_step_outputs], axis=0)
             targets = torch.cat([x["y_true"] for x in val_step_outputs], axis=0)
             self.log("val_loss", avg_val_loss, prog_bar=True)
+            targets_cpu = targets.cpu()
+            preds_cpu = preds.cpu()
             result = {
-                "macro_f1": f1_score(targets, preds, zero_division=0, average="macro"),
+                "macro_f1": f1_score(
+                    targets_cpu, preds_cpu, zero_division=0, average="macro"
+                ),
                 # "f1": f1_score(targets, preds, zero_division=0, average=None),
                 # "precision": precision_score(
                 #     targets, preds, zero_division=0, average=None
                 # ),
                 # "recall": recall_score(targets, preds, zero_division=0, average=None),
-                "accuracy": accuracy_score(targets, preds),
+                "accuracy": accuracy_score(targets_cpu, preds_cpu),
             }
             # text = (
             #     f"\nEpoch: {self.current_epoch} Precision: {result['precision']:.2f}"
