@@ -52,7 +52,7 @@ class ComythRationaleModel(pl.LightningModule):
 
     def validation_epoch_end(self, val_step_outputs):
         if not self.trainer.running_sanity_check:
-            avg_val_loss = torch.tensor([x["loss"] for x in val_step_outputs]).mean()
+            avg_val_loss = torch.tensor([x["loss"].mean() for x in val_step_outputs]).mean()
             preds = torch.cat([x["y_pred"] for x in val_step_outputs], axis=0)
             targets = torch.cat([x["y_true"] for x in val_step_outputs], axis=0)
             self.log("val_loss", avg_val_loss, prog_bar=True)

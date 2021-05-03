@@ -1,7 +1,14 @@
 import warnings
 from transformers import logging
-from covid_mythbuster.data_loader import ComythRationaleDataloader
-from covid_mythbuster.model import ComythLabelModel, ComythRationaleModel
+from covid_mythbuster.data_loader import (
+    ComythRationaleDataloader,
+    ComythLabelDataloader,
+)
+from covid_mythbuster.model import (
+    ComythLabelModel,
+    ComythRationaleModel,
+    AbstractRetrievalModel,
+)
 from covid_mythbuster.trainer import model_trainer
 from covid_mythbuster.config import CONFIG
 
@@ -14,6 +21,13 @@ def main():
     train_data_path = "./data/claims_train.jsonl"
     val_data_path = "./data/claims_dev.jsonl"
     model_name = "roberta-large"
+
+    abstract_model = AbstractRetrievalModel(
+        corpus_path=corpus, dataset_path=train_data_path, top_n=4
+    )
+    abstract_model.fit()
+    abstract_model.evaluate()
+    
     # dataloader = ComythLabelDataloader(
     #     model_name=model_name,
     #     corpus_path=corpus,
@@ -45,7 +59,10 @@ def main():
     )
 
     trainer = model_trainer(
-        model=model, train_dataloader=train_dataloader, val_dataloader=val_dataloader
+        model=model,
+        train_dataloader=train_dataloader,
+        val_dataloader=val_dataloader,
+        progress_bar_refresh_rate=10,
     )
 
 

@@ -26,7 +26,7 @@ CONFIG = configs[ENV]
 BASE_PATH = os.getenv("BASE_PATH", ".")
 
 # Trainer
-N_GPU = 8
+N_GPU = 4
 N_WORKER = configs[ENV]["N_WORKER"]
 FP_PRECISION = 16
 
