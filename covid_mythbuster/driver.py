@@ -27,7 +27,7 @@ def main():
     # )
     # abstract_model.fit()
     # abstract_model.evaluate()
-    
+
     # dataloader = ComythLabelDataloader(
     #     model_name=model_name,
     #     corpus_path=corpus,

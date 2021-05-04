@@ -17,8 +17,8 @@ configs = {
         "MAX_EPOCHS": 50,
         "LR": 3e-4,
         "N_WORKER": 16,
-        "LABEL_PRED": {"LR_BASE": 1e-5, "LR_LINEAR": 1e-4},
-        "RATIONALE_PRED": {"LR_BASE": 1e-5, "LR_LINEAR": 1e-3},
+        "LABEL_PRED": {"LR_BASE": 1e-4, "LR_LINEAR": 1e-4},
+        "RATIONALE_PRED": {"LR_BASE": 1e-4, "LR_LINEAR": 1e-3},
     },
 }
 SEED = 42

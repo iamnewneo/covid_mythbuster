@@ -13,10 +13,7 @@ class ComythRationaleModel(pl.LightningModule):
         self.lr_base = lr_base
         self.lr_linear = lr_linear
         super().__init__(*args, **kwargs)
-        config = AutoConfig.from_pretrained(model_name, num_labels=3)
-        self.model = AutoModelForSequenceClassification.from_pretrained(
-            model_name, config=config
-        )
+        self.model = AutoModelForSequenceClassification.from_pretrained(model_name)
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(
@@ -87,7 +84,6 @@ class ComythLabelModel(pl.LightningModule):
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(
             params=[
-                # If you are using non-roberta based models, change this to point to the right base
                 {"params": self.model.roberta.parameters(), "lr": self.lr_base},
                 {"params": self.model.classifier.parameters(), "lr": self.lr_linear},
             ]
@@ -119,7 +115,9 @@ class ComythLabelModel(pl.LightningModule):
 
     def validation_epoch_end(self, val_step_outputs):
         if not self.trainer.running_sanity_check:
-            avg_val_loss = torch.tensor([x["loss"] for x in val_step_outputs]).mean()
+            avg_val_loss = torch.tensor(
+                [x["loss"].mean() for x in val_step_outputs]
+            ).mean()    
             preds = torch.cat([x["y_pred"] for x in val_step_outputs], axis=0)
             targets = torch.cat([x["y_true"] for x in val_step_outputs], axis=0)
             self.log("val_loss", avg_val_loss, prog_bar=True)
