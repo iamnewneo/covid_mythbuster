@@ -29,13 +29,21 @@ class ComythRationaleModel(pl.LightningModule):
         return self.model(**inputs)
 
     def training_step(self, batch, batch_idx):
-        outputs = self(input_ids=batch["input_ids"], labels=batch["y"].unsqueeze(-1))
+        outputs = self(
+            input_ids=batch["input_ids"],
+            attention_mask=batch["attention_mask"],
+            labels=batch["y"].unsqueeze(-1),
+        )
         loss = outputs.loss
         logits = outputs.logits
         return loss
 
     def validation_step(self, batch, batch_idx):
-        outputs = self(input_ids=batch["input_ids"], labels=batch["y"].unsqueeze(-1))
+        outputs = self(
+            input_ids=batch["input_ids"],
+            attention_mask=batch["attention_mask"],
+            labels=batch["y"].unsqueeze(-1),
+        )
         loss = outputs.loss
         logits = outputs.logits
         y_pred = logits.argmax(dim=1)
@@ -117,7 +125,7 @@ class ComythLabelModel(pl.LightningModule):
         if not self.trainer.running_sanity_check:
             avg_val_loss = torch.tensor(
                 [x["loss"].mean() for x in val_step_outputs]
-            ).mean()    
+            ).mean()
             preds = torch.cat([x["y_pred"] for x in val_step_outputs], axis=0)
             targets = torch.cat([x["y_true"] for x in val_step_outputs], axis=0)
             self.log("val_loss", avg_val_loss, prog_bar=True)
