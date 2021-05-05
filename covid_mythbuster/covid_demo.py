@@ -1,17 +1,18 @@
 import warnings
 import torch
+from transformers import logging
 from covid_mythbuster.inference.covid import (
     AbstractRetriever,
     RationaleSelector,
     LabelPredictor,
 )
-from transformers import logging
+from covid_mythbuster.config import RATIONALE_MODEL_PATH, LABEL_MODEL_PATH
 
 warnings.filterwarnings("ignore")
 logging.set_verbosity_error()
 
-rationale_selection_model = "./models/rationale_roberta_large_scifact/"
-label_prediction_model = "./models/label_roberta_large_scifact/"
+rationale_selection_model = RATIONALE_MODEL_PATH
+label_prediction_model = LABEL_MODEL_PATH
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -42,7 +43,6 @@ def main(claim):
     predicted_labels = label_predictor(claim=claim, retrievals=rationales)
 
     print(f"Claim: {claim}")
-    print(predicted_labels[0])
     for doc_label in predicted_labels:
         if doc_label["label"] != "NOT_ENOUGH_INFO":
             sentences = [doc_label["abstract"][i] for i in doc_label["evidence"]]

@@ -3,18 +3,20 @@ import torch
 import pandas as pd
 import warnings
 from tqdm import tqdm
+from transformers import logging
 from covid_mythbuster.inference.covid import (
     AbstractRetriever,
     RationaleSelector,
     LabelPredictor,
 )
-from transformers import logging
+from covid_mythbuster.config import RATIONALE_MODEL_PATH, LABEL_MODEL_PATH
 
 warnings.filterwarnings("ignore")
 logging.set_verbosity_error()
 
-rationale_selection_model = "./models/rationale_roberta_large_scifact/"
-label_prediction_model = "./models/label_roberta_large_scifact/"
+rationale_selection_model = RATIONALE_MODEL_PATH
+label_prediction_model = LABEL_MODEL_PATH
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 abstract_retriever = AbstractRetriever()
@@ -61,7 +63,7 @@ def main():
     for idx, row in tqdm(df.iterrows(), total=total_rows):
         try:
             claim = row["claim"]
-            abstracts = abstract_retriever(claim=claim, k=10)
+            abstracts = abstract_retriever(claim=claim, k=20)
 
             if len(abstracts) > 0:
                 rationales = rationale_selector(claim=claim, documents=abstracts)

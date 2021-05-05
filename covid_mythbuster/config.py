@@ -37,3 +37,5 @@ MAX_EPOCHS = configs[ENV]["MAX_EPOCHS"]
 RESUME_TRAINING = False
 
 # Model
+RATIONALE_MODEL_PATH = "./models/rationale_roberta_large_scifact/"
+LABEL_MODEL_PATH = "./models/label_roberta_large_scifact/"

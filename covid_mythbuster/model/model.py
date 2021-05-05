@@ -135,17 +135,13 @@ class ComythLabelModel(pl.LightningModule):
                 "macro_f1": f1_score(
                     targets_cpu, preds_cpu, zero_division=0, average="macro"
                 ),
-                # "f1": f1_score(targets, preds, zero_division=0, average=None),
-                # "precision": precision_score(
-                #     targets, preds, zero_division=0, average=None
-                # ),
-                # "recall": recall_score(targets, preds, zero_division=0, average=None),
+                "f1": f1_score(targets, preds, zero_division=0, average=None),
+                "precision": precision_score(
+                    targets, preds, zero_division=0, average=None
+                ),
+                "recall": recall_score(targets, preds, zero_division=0, average=None),
                 "accuracy": accuracy_score(targets_cpu, preds_cpu),
             }
-            # text = (
-            #     f"\nEpoch: {self.current_epoch} Precision: {result['precision']:.2f}"
-            #     f" Recall: {result['recall']:.2f} F1: {result['f1']:.2f}"
-            # )
             text = (
                 f"Epoch: {self.current_epoch} Train Loss: {self.temp_train_loss:.2f}"
                 f" Val Loss: {avg_val_loss:.2f} Macro F1: {result['macro_f1']:.2f}"
