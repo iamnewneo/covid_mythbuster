@@ -1,5 +1,5 @@
 ## General Info
-This repository includes source code for the COVID Scientific Claim Validation project submitted as the project for course CS-5814. The main idea behind the project is to predict whether the current claim is SUPPORTED or REJECTED by the current scientific publications. We achieve this using a twin RoBERTa model. The model also gives the relevant sentences from the abstract of peer-reviewed papers that support or reject the claim.
+This repository includes source code for the COVID Scientific Claim Validation project. The main idea behind the project is to predict whether the current claim is SUPPORTED or REJECTED by the current scientific publications. We achieve this using a twin RoBERTa model. The model also gives the relevant sentences from the abstract of peer-reviewed papers that support or reject the claim.
 
 ## Code Structure
 1. Most of the training code is inside ./covid_mythbuster/train/
